@@ -5,9 +5,9 @@ VisualStudioVersion = 16.0.30523.141
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TheMovies", "TheMovies\TheMovies.csproj", "{24094337-E0D4-42C3-8B08-B5DC6C0F0F39}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ModelsCSV", "ModelsCSV\ModelsCSV.csproj", "{AD94C067-77B4-4561-A76B-D108B2AFE241}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ModelsCSV", "ModelsCSV\ModelsCSV.csproj", "{AD94C067-77B4-4561-A76B-D108B2AFE241}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ModelsDB", "ModelsDB\ModelsDB.csproj", "{A1D9E663-FE75-47A2-9DE2-8ECB0EE4703D}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ModelsDB", "ModelsDB\ModelsDB.csproj", "{A1D9E663-FE75-47A2-9DE2-8ECB0EE4703D}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

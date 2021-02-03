@@ -120,6 +120,7 @@ namespace TheMovies.Repos
 
         private void SaveRepo()
         {
+            string fileName = @"./Data/Ex41-TheMovies.csv";
 
         }
 
@@ -144,6 +145,11 @@ namespace TheMovies.Repos
         //    {
         //        csv.AppendLine(string.Join(";", line));
         //    });
+            var csv = new StringBuilder();
+            addLines.ForEach(line =>
+            {
+                csv.AppendLine(string.Join(";", line));
+            });
 
         //    File.WriteAllText(fileName, csv.ToString());
 
