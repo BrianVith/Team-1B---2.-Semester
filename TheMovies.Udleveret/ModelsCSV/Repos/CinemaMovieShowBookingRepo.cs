@@ -104,7 +104,7 @@ namespace TheMovies.Repos
             var csv = new StringBuilder();
             addLines.ForEach(line =>
             {
-                csv.AppendLine(string.Join(",", line));
+                csv.AppendLine(string.Join(";", line));
             });
 
             File.WriteAllText(fileName, csv.ToString());
