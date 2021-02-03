@@ -88,7 +88,7 @@ namespace TheMovies.Repos
 
         private void SaveRepo()
         {
-            string fileName = @"E:\GitLab\dmu-2020-exercise-materials\Supplerende materiale\Ex41-TheMovies.CSV";
+            string fileName = @"./Data/Ex41-TheMovies.csv";
 
 
             var addLines = (from item in entries
