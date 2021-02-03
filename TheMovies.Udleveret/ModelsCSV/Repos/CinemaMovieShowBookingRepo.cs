@@ -56,7 +56,7 @@ namespace TheMovies.Repos
 
                 while (str != null)
                 {
-                    data = str.Split(new char[] {';'}, StringSplitOptions.None);
+                    data = str.Split(new char[] { ';' }, StringSplitOptions.None);
 
                     CinemaMovieShowBooking movieTheater = new CinemaMovieShowBooking();
 
@@ -66,7 +66,7 @@ namespace TheMovies.Repos
                     movieTheater.MovieTitle = data[3];
                     movieTheater.MovieGenre = data[4];
 
-                    durationData = data[5].Split(new char[] {':'}, StringSplitOptions.None);
+                    durationData = data[5].Split(new char[] { ':' }, StringSplitOptions.None);
                     int hour = int.Parse(durationData[0]);
                     int minutes = int.Parse(durationData[1]);
                     movieTheater.MovieDuration = (hour * 60) + minutes;
@@ -75,7 +75,7 @@ namespace TheMovies.Repos
                     movieTheater.MovieReleaseDate = Convert.ToDateTime(data[7]);
                     movieTheater.BookingMail = data[8];
                     movieTheater.BookingPhone = data[9];
-              
+
 
 
 
@@ -89,28 +89,26 @@ namespace TheMovies.Repos
         private void SaveRepo()
         {
             string fileName = @"E:\GitLab\dmu-2020-exercise-materials\Supplerende materiale\Ex41-TheMovies.CSV";
-            using (StreamWriter writer = new StreamWriter(fileName)
-            )
+
+
+            var addLines = (from item in entries
+                            select new object[]
+                            {
+                            item.CinemaName + item.CinemaTown + item.ShowDateTime +
+                            item.MovieTitle + item.MovieGenre + item.MovieDuration +
+                            item.MovieDirector + item.MovieReleaseDate + item.BookingMail +
+                            item.BookingPhone,
+                            string.Format("\"{0}\"")
+                            }).ToList();
+
+            var csv = new StringBuilder();
+            addLines.ForEach(line =>
             {
+                csv.AppendLine(string.Join(",", line));
+            });
 
-                var addLines = (from item in entries
-                    select new object[]
-                    {
-                        item.CinemaName + item.CinemaTown + item.ShowDateTime +
-                        item.MovieTitle + item.MovieGenre + item.MovieDuration +
-                        item.MovieDirector + item.MovieReleaseDate + item.BookingMail +
-                        item.BookingPhone,
-                        string.Format("\"{0}\"")
-                    }).ToList();
+            File.WriteAllText(fileName, csv.ToString());
 
-                var csv = new StringBuilder();
-                addLines.ForEach(line =>
-                {
-                    csv.AppendLine(string.Join(",", line));
-                });
-
-                File.WriteAllText(fileName, csv.ToString());
-            }
         }
 
     }
