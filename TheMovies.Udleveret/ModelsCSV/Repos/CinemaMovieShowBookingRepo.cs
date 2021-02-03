@@ -73,8 +73,7 @@ namespace TheMovies.Repos
                     movieTheater.MovieDirector = data[6];
                     movieTheater.MovieReleaseDate = Convert.ToDateTime(data[7]);
                     movieTheater.BookingMail = data[8];
-                    movieTheater.BookingPhone = data[9];
-                    
+                    movieTheater.BookingPhone = data[9];                  
 
                     Add(movieTheater);                   
              
