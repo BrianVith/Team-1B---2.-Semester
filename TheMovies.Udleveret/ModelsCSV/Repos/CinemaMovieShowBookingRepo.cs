@@ -31,22 +31,57 @@ namespace TheMovies.Repos
 
         public void Add(CinemaMovieShowBooking obj)
         {
-            entries.Add(obj);
+            bool alreadyExist = false;
+
+            foreach (CinemaMovieShowBooking item in entries)
+            {
+                if (obj.Equals(item))
+                {
+                    alreadyExist = true;
+                    break;
+                }
+            }
+
+            if (!alreadyExist)
+            {
+                entries.Add(obj);
+            }         
+            
         }
 
         public void Delete(CinemaMovieShowBooking obj)
         {
-            entries.Remove(obj);
+            List<CinemaMovieShowBooking> temp = new List<CinemaMovieShowBooking>();
+            foreach (CinemaMovieShowBooking item in entries)
+            {
+                if (obj.CinemaName == item.CinemaName && obj.CinemaTown == item.CinemaTown)
+                {
+                    temp.Add(item);
+                }
+            }
+            foreach (CinemaMovieShowBooking item in temp)
+            {
+                entries.Remove(item);
+            }
+
         }
 
         public void Update(CinemaMovieShowBooking obj, CinemaMovieShowBooking newValues)
         {
-            obj = newValues;
+            foreach (CinemaMovieShowBooking item in entries)
+            {
+                if (obj.CinemaName == item.CinemaName && obj.CinemaTown == item.CinemaTown)
+                {
+                    item.CinemaName = newValues.CinemaName;
+                    item.CinemaTown = newValues.CinemaTown;
+                }
+            }
         }
 
         private void LoadRepo()
         {
-            string fileName = @"E:\GitLab\dmu-2020-exercise-materials\Supplerende materiale\Ex41-TheMovies.CSV";
+            string fileName = "repos\\Ex41-TheMovies.CSV";
+            //string fileName = @"E:\GitLab\dmu-2020-exercise-materials\Supplerende materiale\Ex41-TheMovies.CSV";
             using (StreamReader reader = new StreamReader(fileName))
             {
                 reader.ReadLine();
@@ -76,10 +111,7 @@ namespace TheMovies.Repos
                     movieTheater.BookingMail = data[8];
                     movieTheater.BookingPhone = data[9];
 
-
-
-
-                    Add(movieTheater);
+                    entries.Add(movieTheater);
 
                     str = reader.ReadLine();
                 }
@@ -88,28 +120,34 @@ namespace TheMovies.Repos
 
         private void SaveRepo()
         {
-            string fileName = @"E:\GitLab\dmu-2020-exercise-materials\Supplerende materiale\Ex41-TheMovies.CSV";
-
-
-            var addLines = (from item in entries
-                            select new object[]
-                            {
-                            item.CinemaName + item.CinemaTown + item.ShowDateTime +
-                            item.MovieTitle + item.MovieGenre + item.MovieDuration +
-                            item.MovieDirector + item.MovieReleaseDate + item.BookingMail +
-                            item.BookingPhone,
-                            string.Format("\"{0}\"")
-                            }).ToList();
-
-            var csv = new StringBuilder();
-            addLines.ForEach(line =>
-            {
-                csv.AppendLine(string.Join(",", line));
-            });
-
-            File.WriteAllText(fileName, csv.ToString());
 
         }
+
+        //private void SaveRepo()
+        //{
+        //    string fileName = "repos\\Ex41-TheMovies.CSV";
+        //    //string fileName = @"E:\GitLab\dmu-2020-exercise-materials\Supplerende materiale\Ex41-TheMovies.CSV";
+
+        //    //string addLines
+        //    var addLines = (from item in entries
+        //                    select new object[]
+        //                    {
+        //                    item.CinemaName + item.CinemaTown + item.ShowDateTime +
+        //                    item.MovieTitle + item.MovieGenre + item.MovieDuration +
+        //                    item.MovieDirector + item.MovieReleaseDate + item.BookingMail +
+        //                    item.BookingPhone,
+        //                    string.Format("\"{0}\"")
+        //                    }).ToList();
+
+        //    var csv = new StringBuilder();
+        //    addLines.ForEach(line =>
+        //    {
+        //        csv.AppendLine(string.Join(";", line));
+        //    });
+
+        //    File.WriteAllText(fileName, csv.ToString());
+
+        //}
 
     }
 }
