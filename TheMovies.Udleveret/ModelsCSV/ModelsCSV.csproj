@@ -6,7 +6,7 @@
 
   <ItemGroup>
     <None Update="Repos\Ex41-TheMovies.CSV">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
   </ItemGroup>
 

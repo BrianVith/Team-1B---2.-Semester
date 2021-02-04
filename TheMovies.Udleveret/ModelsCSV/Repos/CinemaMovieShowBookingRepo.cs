@@ -31,22 +31,26 @@ namespace TheMovies.Repos
 
         public void Add(CinemaMovieShowBooking obj)
         {
-            bool alreadyExist = false;
 
             foreach (CinemaMovieShowBooking item in entries)
             {
-                if (obj.Equals(item))
+
+                if (obj.CinemaName == item.CinemaName
+                    && obj.CinemaTown == item.CinemaTown
+                    && obj.MovieTitle == default
+                    && obj.MovieDirector == default
+                    && obj.MovieDuration == default
+                    && obj.MovieGenre == default
+                    && obj.ShowDateTime == default
+                    && obj.BookingPhone == default
+                    && obj.BookingMail == default)
                 {
-                    alreadyExist = true;
-                    break;
+                    throw new ArgumentException("dublet");
                 }
             }
 
-            if (!alreadyExist)
-            {
-                entries.Add(obj);
-            }         
-            
+            entries.Add(obj);
+            SaveRepo();
         }
 
         public void Delete(CinemaMovieShowBooking obj)
@@ -54,28 +58,81 @@ namespace TheMovies.Repos
             List<CinemaMovieShowBooking> temp = new List<CinemaMovieShowBooking>();
             foreach (CinemaMovieShowBooking item in entries)
             {
-                if (obj.CinemaName == item.CinemaName && obj.CinemaTown == item.CinemaTown)
+                if (obj.CinemaName == item.CinemaName && obj.CinemaName != default
+                    && obj.CinemaTown == item.CinemaTown && obj.CinemaTown != default)
                 {
                     temp.Add(item);
                 }
+
+                if (obj.MovieTitle == item.MovieTitle
+                    && obj.MovieDuration == item.MovieDuration && obj.MovieDuration != default
+                    && obj.MovieDirector == item.MovieDirector && obj.MovieDirector != default
+                    && obj.MovieGenre == item.MovieGenre && obj.MovieGenre != default)
+                {
+                    temp.Add(item);
+                }
+
+                if (obj.ShowDateTime == item.ShowDateTime && obj.ShowDateTime != default)
+                {
+                    temp.Add(item);
+                }
+
+                if (obj.BookingMail == item.BookingMail && obj.BookingMail != default
+                    && obj.BookingPhone == item.BookingPhone && obj.BookingPhone != default)
+                {
+                    temp.Add(item);
+                }
+
             }
+
             foreach (CinemaMovieShowBooking item in temp)
             {
                 entries.Remove(item);
             }
 
+            SaveRepo();
         }
 
         public void Update(CinemaMovieShowBooking obj, CinemaMovieShowBooking newValues)
         {
             foreach (CinemaMovieShowBooking item in entries)
             {
-                if (obj.CinemaName == item.CinemaName && obj.CinemaTown == item.CinemaTown)
+                if (obj.CinemaName == item.CinemaName 
+                    && obj.CinemaTown == item.CinemaTown)
                 {
                     item.CinemaName = newValues.CinemaName;
                     item.CinemaTown = newValues.CinemaTown;
                 }
+
+                if (obj.MovieGenre == item.MovieGenre 
+                    && obj.MovieDuration == item.MovieDuration
+                    && obj.MovieDirector == item.MovieDirector
+                    && obj.MovieTitle == item.MovieTitle
+                    && obj.MovieReleaseDate == item.MovieReleaseDate)
+                {
+                    item.MovieGenre = newValues.MovieGenre;
+                    item.MovieDuration = newValues.MovieDuration;
+                    item.MovieDirector = newValues.MovieDirector;
+                    item.MovieTitle = newValues.MovieTitle;
+                    item.MovieReleaseDate = newValues.MovieReleaseDate;
+                }
+
+                if (obj.ShowDateTime == item.ShowDateTime)
+                {
+                    item.ShowDateTime = newValues.ShowDateTime;
+                }
+
+                if (obj.BookingMail == item.BookingMail 
+                    && obj.BookingPhone == item.BookingPhone)
+                {
+                    item.BookingPhone = newValues.BookingPhone;
+                    item.BookingMail = newValues.BookingMail;
+                }
+
             }
+
+            SaveRepo();
+
         }
 
         private void LoadRepo()
@@ -92,41 +149,61 @@ namespace TheMovies.Repos
                 while (str != null)
                 {
                     data = str.Split(new char[] { ';' }, StringSplitOptions.None);
+                    if (data.Length>9)
+                    {
+                        CinemaMovieShowBooking movieTheater = new CinemaMovieShowBooking();
 
-                    CinemaMovieShowBooking movieTheater = new CinemaMovieShowBooking();
+                        movieTheater.CinemaName = data[0];
+                        movieTheater.CinemaTown = data[1];
+                        movieTheater.ShowDateTime = Convert.ToDateTime(data[2]);
+                        movieTheater.MovieTitle = data[3];
+                        movieTheater.MovieGenre = data[4];
 
-                    movieTheater.CinemaName = data[0];
-                    movieTheater.CinemaTown = data[1];
-                    movieTheater.ShowDateTime = Convert.ToDateTime(data[2]);
-                    movieTheater.MovieTitle = data[3];
-                    movieTheater.MovieGenre = data[4];
+                        durationData = data[5].Split(new char[] { ':' }, StringSplitOptions.None);
+                        int hour = int.Parse(durationData[0]);
+                        int minutes = int.Parse(durationData[1]);
+                        movieTheater.MovieDuration = (hour * 60) + minutes;
+                        movieTheater.MovieDirector = data[6];
+                        movieTheater.MovieReleaseDate = Convert.ToDateTime(data[7]);
+                        movieTheater.BookingMail = data[8];
+                        movieTheater.BookingPhone = data[9];
 
-                    durationData = data[5].Split(new char[] { ':' }, StringSplitOptions.None);
-                    int hour = int.Parse(durationData[0]);
-                    int minutes = int.Parse(durationData[1]);
-                    movieTheater.MovieDuration = (hour * 60) + minutes;
+                        entries.Add(movieTheater);
 
-                    movieTheater.MovieDirector = data[6];
-                    movieTheater.MovieReleaseDate = Convert.ToDateTime(data[7]);
-                    movieTheater.BookingMail = data[8];
-                    movieTheater.BookingPhone = data[9];
-
-                    entries.Add(movieTheater);
-
-                    str = reader.ReadLine();
+                        str = reader.ReadLine();
+                    }
                 }
             }
         }
 
         private void SaveRepo()
         {
-            string fileName = @"./Data/Ex41-TheMovies.csv";
+            string fileName = "repos\\Ex41-TheMovies.CSV";
 
+            using (StreamWriter writer = new StreamWriter(fileName, false))
+            {
+                writer.WriteLine("Biograf;By;Forestillingstidspunkt;Filmtitel;Filmgenre;" +
+                    "Filmvarighed;Filminstruktør;Premieredato;Bookingmail;Bookingtelefonnummer");
+                
+                foreach (CinemaMovieShowBooking item in entries)
+                {
+                    
+                    int hour = item.MovieDuration / 60;
+                    int minutes = item.MovieDuration % 60;
+
+                    writer.WriteLine(item.CinemaName + ";" + item.CinemaTown + ";" + item.ShowDateTime.ToString() + ";" +
+                        item.MovieTitle + ";" + item.MovieGenre + ";" + $"{hour:00}:{minutes:00}" + ";" +
+                        item.MovieDirector + ";" + item.MovieReleaseDate.ToShortDateString() + ";" + item.BookingMail + ";" +
+                        item.BookingPhone);
+                }
+            }
+            
         }
 
         //private void SaveRepo()
         //{
-        //    string fileName = "repos\\Ex41-TheMovies.CSV";
+            
+        //    string fileName = @"./Data/Ex41-TheMovies.csv";
         //    //string fileName = @"E:\GitLab\dmu-2020-exercise-materials\Supplerende materiale\Ex41-TheMovies.CSV";
 
         //    //string addLines
@@ -145,11 +222,6 @@ namespace TheMovies.Repos
         //    {
         //        csv.AppendLine(string.Join(";", line));
         //    });
-            var csv = new StringBuilder();
-            addLines.ForEach(line =>
-            {
-                csv.AppendLine(string.Join(";", line));
-            });
 
         //    File.WriteAllText(fileName, csv.ToString());
 
