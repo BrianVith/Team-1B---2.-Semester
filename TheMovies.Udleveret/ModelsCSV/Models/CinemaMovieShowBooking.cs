@@ -17,6 +17,12 @@ namespace TheMovies.Models
         public string BookingMail { get; set; }
         public string BookingPhone { get; set; }
 
+        public string GetId()
+        {
+            string hej = "";
+            return hej;
+        }
+
         public override string ToString()
         {
             return $"Cinema: {CinemaName}, Town: {CinemaTown}, Show: {ShowDateTime}, Movie: {MovieTitle}, Genre: {MovieGenre}, Duration: {MovieDuration}, Director: {MovieDirector}, Release: {MovieReleaseDate}, Booking mail: {BookingMail}, Booking phone: {BookingPhone}";

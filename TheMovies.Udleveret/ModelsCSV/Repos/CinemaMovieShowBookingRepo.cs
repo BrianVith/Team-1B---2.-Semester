@@ -26,7 +26,19 @@ namespace TheMovies.Repos
 
         public CinemaMovieShowBooking GetById(object id)
         {
+            CinemaMovieShowBooking temp = id as CinemaMovieShowBooking;
+            foreach (var item in entries)
+            {
+                if (temp.BookingPhone == item.BookingPhone)
+                {
+                    temp = item;
+                }
+            }
+
+            return temp;
+            //ud fra tlf nummer kunne man lave et id, så man kan finde hvad en bestemt kunde har booket.
             throw new NotImplementedException();
+
         }
 
         public void Add(CinemaMovieShowBooking obj)
@@ -35,8 +47,8 @@ namespace TheMovies.Repos
             foreach (CinemaMovieShowBooking item in entries)
             {
 
-                if (obj.CinemaName == item.CinemaName
-                    && obj.CinemaTown == item.CinemaTown
+                if (obj.CinemaName == item.CinemaName && item.CinemaName != default
+                    && obj.CinemaTown == item.CinemaTown && item.CinemaTown != default
                     && obj.MovieTitle == default
                     && obj.MovieDirector == default
                     && obj.MovieDuration == default
@@ -47,10 +59,58 @@ namespace TheMovies.Repos
                 {
                     throw new ArgumentException("dublet");
                 }
+
+                if (obj.CinemaName != default
+                    && obj.CinemaTown != default
+                    && obj.MovieTitle == item.MovieTitle && item.MovieTitle != default
+                    && obj.MovieDuration == item.MovieDuration && item.MovieDuration != default
+                    && obj.ShowDateTime == default
+                    && obj.BookingPhone == default
+                    && obj.BookingMail == default)
+                {
+                    throw new ArgumentException("dublet");
+                }
+
+                if (obj.CinemaName != default
+                    && obj.CinemaTown != default
+                    && obj.MovieTitle != default
+                    && obj.MovieDuration != default
+                    && obj.ShowDateTime == item.ShowDateTime && item.ShowDateTime != default
+                    && obj.BookingPhone == default
+                    && obj.BookingMail == default)
+                {
+                    throw new ArgumentException("dublet");
+                }
+
+
+                if (obj.CinemaName == item.CinemaName && item.CinemaName != default
+                    && obj.CinemaTown == item.CinemaTown && item.CinemaTown != default
+                    && obj.MovieTitle == item.MovieTitle && item.MovieTitle != default
+                    && obj.MovieDuration == item.MovieDuration && item.MovieDuration != default
+                    && obj.ShowDateTime == item.ShowDateTime && item.ShowDateTime != default
+                    && obj.BookingPhone == item.BookingPhone && item.BookingPhone != default
+                    && obj.BookingMail == item.BookingMail && item.BookingMail != default)
+                {
+                    throw new ArgumentException("dublet");
+                }
+
+                //if (obj.CinemaName != default
+                // && obj.CinemaTown != default
+                // && obj.MovieTitle != default
+                // && obj.MovieDuration != default
+                // && obj.ShowDateTime != default
+                // && obj.BookingPhone == item.BookingPhone
+                // && obj.BookingMail == item.BookingMail)
+                //{
+                //    throw new ArgumentException("dublet");
+                //}
+
+
             }
 
             entries.Add(obj);
             SaveRepo();
+           
         }
 
         public void Delete(CinemaMovieShowBooking obj)
@@ -64,7 +124,7 @@ namespace TheMovies.Repos
                     temp.Add(item);
                 }
 
-                if (obj.MovieTitle == item.MovieTitle
+                if (obj.MovieTitle == item.MovieTitle && obj.MovieTitle != default
                     && obj.MovieDuration == item.MovieDuration && obj.MovieDuration != default
                     && obj.MovieDirector == item.MovieDirector && obj.MovieDirector != default
                     && obj.MovieGenre == item.MovieGenre && obj.MovieGenre != default)
@@ -191,10 +251,38 @@ namespace TheMovies.Repos
                     int hour = item.MovieDuration / 60;
                     int minutes = item.MovieDuration % 60;
 
-                    writer.WriteLine(item.CinemaName + ";" + item.CinemaTown + ";" + item.ShowDateTime.ToString() + ";" +
-                        item.MovieTitle + ";" + item.MovieGenre + ";" + $"{hour:00}:{minutes:00}" + ";" +
-                        item.MovieDirector + ";" + item.MovieReleaseDate.ToShortDateString() + ";" + item.BookingMail + ";" +
-                        item.BookingPhone);
+                    if(item.CinemaName != default
+                    && item.CinemaTown != default
+                    && item.MovieTitle != default
+                    && item.MovieDirector != default
+                    && item.MovieDuration != default
+                    && item.MovieGenre != default
+                    && item.ShowDateTime != default
+                    && item.BookingPhone != default
+                    && item.BookingMail != default)
+                    {
+                        writer.Write($"{item.CinemaName};");
+                        writer.Write($"{item.CinemaTown};");
+                        writer.Write($"{item.ShowDateTime.ToString()};");
+                        writer.Write($"{item.MovieTitle};");
+                        writer.Write($"{item.MovieGenre};");
+                        writer.Write($"{hour:00}:{minutes:00};");
+                        writer.Write($"{item.MovieDirector};");
+                        writer.Write($"{item.MovieReleaseDate.ToShortDateString()};");
+                        writer.Write($"{item.BookingMail};");
+                        writer.WriteLine($"{item.BookingPhone}"); 
+                    }
+
+                    //writer.WriteLine(item.CinemaName + ";" 
+                    //    + item.CinemaTown + ";" 
+                    //    + item.ShowDateTime.ToString() + ";" 
+                    //    + item.MovieTitle + ";" 
+                    //    + item.MovieGenre + ";" 
+                    //    + $"{hour:00}:{minutes:00}" + ";" 
+                    //    + item.MovieDirector + ";" 
+                    //    + item.MovieReleaseDate.ToShortDateString() + ";" 
+                    //    + item.BookingMail + ";" 
+                    //    + item.BookingPhone);
                 }
             }
             
