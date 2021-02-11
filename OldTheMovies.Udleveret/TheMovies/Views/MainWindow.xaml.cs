@@ -146,7 +146,7 @@ namespace TheMovies
                 }
                 catch (Exception)
                 {
-                    MessageBox.Show($"Filmen {cd.tbMovieTitle} mm. eksisterer allerede. Prøv igen.", "Kan ikke tilføje film", MessageBoxButton.OK);
+                    MessageBox.Show($"Filmen {cd.tbMovieTitle.Text} mm. eksisterer allerede. Prøv igen.", "Kan ikke tilføje film", MessageBoxButton.OK);
                 }
             }
         }

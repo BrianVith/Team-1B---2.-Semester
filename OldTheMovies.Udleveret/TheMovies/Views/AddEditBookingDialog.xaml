@@ -1,0 +1,18 @@
+﻿<Window x:Class="TheMovies.Views.AddEditBookingDialog"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:TheMovies.Views"
+        mc:Ignorable="d"
+        Title="AddEditBookingDialog" Height="189" Width="330">
+    <Grid>
+        <Label Content="Booking mail:" HorizontalAlignment="Left" Margin="22,24,0,0" VerticalAlignment="Top"/>
+        <Label Content="Booking telefon:" HorizontalAlignment="Left" Margin="22,55,0,0" VerticalAlignment="Top"/>
+        <TextBox x:Name="tbBookingMail" Margin="130,28,37,0" TextWrapping="Wrap" VerticalAlignment="Top"/>
+        <TextBox x:Name="tbBookingPhone" Margin="130,59,37,0" TextWrapping="Wrap" VerticalAlignment="Top"/>
+        <Button x:Name="btnOK" Content="OK" Margin="0,111,139,0" VerticalAlignment="Top" IsDefault="True" HorizontalAlignment="Right" Width="84" Click="btnOK_Click"/>
+        <Button Content="Fortryd" Margin="0,111,37,0" VerticalAlignment="Top" IsCancel="True" HorizontalAlignment="Right" Width="82"/>
+
+    </Grid>
+</Window>

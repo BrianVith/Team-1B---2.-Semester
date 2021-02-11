@@ -1,0 +1,156 @@
+﻿<Window x:Class="TheMovies.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:TheMovies"
+        mc:Ignorable="d"
+        Title="The Movies" Height="450" Width="800">
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="5"/>
+            <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
+        <Grid Grid.Column="0">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="5"/>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="5"/>
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
+            <Grid Grid.Row="0">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="40"/>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="35"/>
+                </Grid.RowDefinitions>
+                <Label Grid.Row="0" Content="Biografer" Background="Black" Foreground="White" FontSize="20" FontWeight="Bold" Margin="0,0,0,0" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" HorizontalContentAlignment="Center" VerticalContentAlignment="Center"/>
+                <ListBox x:Name="lbCinemas" Grid.Row="1" ItemsSource="{Binding Cinemas}" SelectedItem="{Binding SelectedCinema}">
+                    <ListBox.ItemTemplate>
+                        <DataTemplate>
+                            <TextBlock>
+                                <Run Text="{Binding Cinema}" FontWeight="Bold"/><Run Text=" ("/><Run Text="{Binding Town}"/><Run Text=")"/>
+                                <TextBlock.Style>
+                                    <Style TargetType="TextBlock">
+                                        <Style.Triggers>
+                                            <DataTrigger Binding="{Binding Locked}" Value="True">
+                                                <Setter Property="Background" Value="Yellow"/>
+                                            </DataTrigger>
+                                        </Style.Triggers>
+                                    </Style>
+                                </TextBlock.Style>
+                            </TextBlock>
+                        </DataTemplate>
+                    </ListBox.ItemTemplate>
+                </ListBox>
+                <StackPanel Grid.Row="2" Orientation="Horizontal">
+                    <Button x:Name="btnAddCinema" Content="Tilføj" Height="20" Width="50" Margin="5" Click="btnAddCinema_Click"/>
+                    <Button x:Name="btnEditCinema" Content="Rediger" Height="20" Width="50" Margin="5" Click="btnEditCinema_Click"/>
+                    <Button x:Name="btnDeleteCinema" Content="Slet" Height="20" Width="50" Margin="5" Click="btnDeleteCinema_Click"/>
+                    <Button x:Name="btnCinemaLockRelease" Content="Lås" Height="20" Width="50" Margin="5" Click="btnLockReleaseCinema_Click"/>
+                </StackPanel>
+            </Grid>
+            <GridSplitter Grid.Row="1" Height="5" HorizontalAlignment="Stretch"/>
+            <Grid Grid.Row="2">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="40"/>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="35"/>
+                </Grid.RowDefinitions>
+                <Label Grid.Row="0" Content="Film" Background="Black" Foreground="White" FontSize="20" FontWeight="Bold" Margin="0,0,0,0" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" HorizontalContentAlignment="Center" VerticalContentAlignment="Center"/>
+                <ListBox x:Name="lbMovies" Grid.Row="1" ItemsSource="{Binding Movies}" SelectedItem="{Binding SelectedMovie}">
+                    <ListBox.ItemTemplate>
+                        <DataTemplate>
+                            <TextBlock>
+                                <Run Text="{Binding Title, Mode=OneWay}" FontWeight="Bold"/><Run Text=" ("/><Run Text="{Binding Duration, Mode=OneWay}"/><Run Text=" minutter, instrueret af "/><Run Text="{Binding Director, Mode=OneWay}"/><Run Text=", genrer: "/><Run Text="{Binding Genre, Mode=OneWay}"/><Run Text=")"/>
+                                <TextBlock.Style>
+                                    <Style TargetType="TextBlock">
+                                        <Style.Triggers>
+                                            <DataTrigger Binding="{Binding Locked}" Value="True">
+                                                <Setter Property="Background" Value="Yellow"/>
+                                            </DataTrigger>
+                                        </Style.Triggers>
+                                    </Style>
+                                </TextBlock.Style>
+                            </TextBlock>
+                        </DataTemplate>
+                    </ListBox.ItemTemplate>
+                </ListBox>
+                <StackPanel Grid.Row="2" Orientation="Horizontal">
+                    <Button x:Name="btnAddMovie" Content="Tilføj" Height="20" Width="50" Margin="5" Click="btnAddMovie_Click"/>
+                    <Button x:Name="btnEditMovie" Content="Rediger" Height="20" Width="50" Margin="5" Click="btnEditMovie_Click"/>
+                    <Button x:Name="btnDeleteMovie" Content="Slet" Height="20" Width="50" Margin="5" Click="btnDeleteMovie_Click"/>
+                    <Button x:Name="btnMovieLockRelease" Content="Lås" Height="20" Width="50" Margin="5" Click="btnLockReleaseMovie_Click"/>
+                </StackPanel>
+            </Grid>
+            <GridSplitter Grid.Row="3" Height="5" HorizontalAlignment="Stretch"/>
+            <Grid Grid.Row="4">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="40"/>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="35"/>
+                </Grid.RowDefinitions>
+                <Label Grid.Row="0" Content="Forestillinger" Background="Black" Foreground="White" FontSize="20" FontWeight="Bold" Margin="0,0,0,0" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" HorizontalContentAlignment="Center" VerticalContentAlignment="Center"/>
+                <ListBox x:Name="lbShows" Grid.Row="1" ItemsSource="{Binding Shows}" SelectedItem="{Binding SelectedShow}">
+                    <ListBox.ItemTemplate>
+                        <DataTemplate>
+                            <TextBlock>
+                                <Run Text="{Binding ShowDateTime, Mode=OneWay, StringFormat={}dddd dd-MM-yyyy kl. HH:mm}"/>
+                                <TextBlock.Style>
+                                    <Style TargetType="TextBlock">
+                                        <Style.Triggers>
+                                            <DataTrigger Binding="{Binding Locked}" Value="True">
+                                                <Setter Property="Background" Value="Yellow"/>
+                                            </DataTrigger>
+                                        </Style.Triggers>
+                                    </Style>
+                                </TextBlock.Style>
+                            </TextBlock>
+                        </DataTemplate>
+                    </ListBox.ItemTemplate>
+                </ListBox>
+                <StackPanel Grid.Row="2" Orientation="Horizontal">
+                    <Button x:Name="btnAddShow" Content="Tilføj" Height="20" Width="50" Margin="5" Click="btnAddShow_Click"/>
+                    <Button x:Name="btnEditShow" Content="Rediger" Height="20" Width="50" Margin="5" Click="btnEditShow_Click"/>
+                    <Button x:Name="btnDeleteShow" Content="Slet" Height="20" Width="50" Margin="5" Click="btnDeleteShow_Click"/>
+                    <Button x:Name="btnShowLockRelease" Content="Lås" Height="20" Width="50" Margin="5" Click="btnLockReleaseShow_Click"/>
+                </StackPanel>
+            </Grid>
+        </Grid>
+        <GridSplitter Grid.Column="1" Width="5" HorizontalAlignment="Stretch"/>
+        <Grid Grid.Column="2">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="40"/>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="35"/>
+            </Grid.RowDefinitions>
+            <Label Grid.Row="0" Content="Bookings" Background="Black" Foreground="White" FontSize="20" FontWeight="Bold" Margin="0,0,0,0" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" HorizontalContentAlignment="Center" VerticalContentAlignment="Center"/>
+            <ListBox x:Name="lbBookings" Grid.Row="1" ItemsSource="{Binding Bookings}" SelectedItem="{Binding SelectedBooking}">
+                <ListBox.ItemTemplate>
+                    <DataTemplate>
+                        <TextBlock>
+                            <Run Text="Telefon: "/><Run Text="{Binding BookingPhone, Mode=OneWay}"/><Run Text=" (Mail: "/><Run Text="{Binding BookingMail, Mode=OneWay}"/><Run Text=")"/>
+                            <TextBlock.Style>
+                                <Style TargetType="TextBlock">
+                                    <Style.Triggers>
+                                        <DataTrigger Binding="{Binding Locked}" Value="True">
+                                            <Setter Property="Background" Value="Yellow"/>
+                                        </DataTrigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </TextBlock.Style>
+                        </TextBlock>
+                    </DataTemplate>
+                </ListBox.ItemTemplate>
+            </ListBox>
+            <StackPanel Grid.Row="2" Orientation="Horizontal">
+                <Button x:Name="btnAddBooking" Content="Tilføj" Height="20" Width="50" Margin="5" Click="btnAddBooking_Click"/>
+                <Button x:Name="btnEditBooking" Content="Rediger" Height="20" Width="50" Margin="5" Click="btnEditBooking_Click"/>
+                <Button x:Name="btnDeleteBooking" Content="Slet" Height="20" Width="50" Margin="5" Click="btnDeleteBooking_Click"/>
+                <Button x:Name="btnBookingLockRelease" Content="Lås" Height="20" Width="50" Margin="5" Click="btnLockReleaseBooking_Click"/>
+            </StackPanel>
+        </Grid>
+    </Grid>
+</Window>

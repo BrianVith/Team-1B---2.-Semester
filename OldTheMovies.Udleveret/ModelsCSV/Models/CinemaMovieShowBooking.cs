@@ -17,10 +17,11 @@ namespace TheMovies.Models
         public string BookingMail { get; set; }
         public string BookingPhone { get; set; }
 
-        //public string GetId()
-        //{
-           
-        //}
+        public string GetId()
+        {
+            string hej = "";
+            return hej;
+        }
 
         public override string ToString()
         {
