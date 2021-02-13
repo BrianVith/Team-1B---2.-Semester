@@ -16,10 +16,11 @@ namespace TheMovies.Models
         public DateTime MovieReleaseDate { get; set; }
         public string BookingMail { get; set; }
         public string BookingPhone { get; set; }
+        public int BookingID { get; set; }
 
         //public string GetId()
         //{
-           
+
         //}
 
         public override string ToString()

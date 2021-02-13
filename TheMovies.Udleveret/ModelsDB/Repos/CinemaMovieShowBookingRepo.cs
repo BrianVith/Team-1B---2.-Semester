@@ -18,6 +18,7 @@ namespace TheMovies.Repos
         {
             entries = new List<CinemaMovieShowBooking>();
             LoadRepo();
+            //ResetDatabase();
         }
 
         public CinemaMovieShowBooking GetById(object id)
@@ -85,16 +86,16 @@ namespace TheMovies.Repos
                     throw new ArgumentException("dublet");
                 }
 
-                //if (obj.CinemaName != default
-                // && obj.CinemaTown != default
-                // && obj.MovieTitle != default
-                // && obj.MovieDuration != default
-                // && obj.ShowDateTime != default
-                // && obj.BookingPhone == item.BookingPhone
-                // && obj.BookingMail == item.BookingMail)
-                //{
-                //    throw new ArgumentException("dublet");
-                //}
+                if (obj.CinemaName != default
+                 && obj.CinemaTown != default
+                 && obj.MovieTitle != default
+                 && obj.MovieDuration != default
+                 && obj.ShowDateTime != default
+                 && obj.BookingPhone == item.BookingPhone
+                 && obj.BookingMail == item.BookingMail)
+                {
+                    throw new ArgumentException("dublet");
+                }
 
 
             }
@@ -102,10 +103,10 @@ namespace TheMovies.Repos
             entries.Add(obj);
 
             string commandText = "INSERT INTO Booking (" +
-            "cinemaName,cinemaTown,movieTitle," +
+            "cinemaTown,cinemaName,movieTitle," +
             "movieGenre,movieDirector,movieDuration," +
             "movieReleaseDate,showDateTime,bookingPhone,bookingMail)"
-            + "VALUES (@cinemaName,@cinemaTown," +
+            + "VALUES (@cinemaTown,@cinemaName," +
             "@movieTitle,@movieGenre,@movieDirector," +
             "@movieDuration,@movieReleaseDate,@showDateTime," +
             "@bookingPhone,@bookingMail);";
@@ -224,7 +225,7 @@ namespace TheMovies.Repos
                     command.Parameters.AddWithValue("@movieTitle", item.MovieTitle);
                     command.Parameters.AddWithValue("@movieGenre", item.MovieGenre);
                     command.Parameters.AddWithValue("@movieDirector", item.MovieDirector);
-                    command.Parameters.AddWithValue("@movieDuration", hourMinutes);
+                    command.Parameters.AddWithValue("@movieDuration", item.MovieDuration);
                     command.Parameters.AddWithValue("@movieReleaseDate", item.MovieReleaseDate);
                     command.Parameters.AddWithValue("@showDateTime", item.ShowDateTime);
                     command.Parameters.AddWithValue("@bookingPhone", item.BookingPhone);
@@ -237,47 +238,40 @@ namespace TheMovies.Repos
 
         private void LoadRepo()
         {
-            string fileName = "TheMovies.CSV";
-            //string fileName = @"E:\GitLab\dmu-2020-exercise-materials\Supplerende materiale\Ex41-TheMovies.CSV";
-            using (StreamReader reader = new StreamReader(fileName))
+            using (SqlConnection connection = new SqlConnection(connectionString))
             {
-                reader.ReadLine();
-                string str = reader.ReadLine();
-                string[] data;
-                string[] durationData;
+                string[] hourMinutes;
+                connection.Open();
 
-                while (str != null)
+                SqlCommand command = new SqlCommand("SELECT * FROM Booking;", connection);
+                SqlDataReader reader = command.ExecuteReader();
+                while (reader.Read())
                 {
-                    data = str.Split(new char[] { ';' }, StringSplitOptions.None);
-                    if (data.Length > 9)
-                    {
-                        CinemaMovieShowBooking movieTheater = new CinemaMovieShowBooking();
+                    CinemaMovieShowBooking booking = new CinemaMovieShowBooking();
 
-                        movieTheater.CinemaName = data[0];
-                        movieTheater.CinemaTown = data[1];
-                        movieTheater.ShowDateTime = Convert.ToDateTime(data[2]);
-                        movieTheater.MovieTitle = data[3];
-                        movieTheater.MovieGenre = data[4];
+                    booking.BookingID = (int)reader[0];
+                    booking.CinemaName = (string)reader[1];
+                    booking.CinemaTown = (string)reader[2];
+                    booking.MovieTitle = (string)reader[3];
+                    booking.MovieGenre = (string)reader[4];
+                    booking.MovieDirector = (string)reader[5];
+                    hourMinutes = ((string)reader[6]).Split(new char[] { ':' }, StringSplitOptions.None);
+                    int hour = int.Parse(hourMinutes[0]);
+                    int minutes = int.Parse(hourMinutes[1]);
+                    booking.MovieDuration = (hour * 60) + minutes;
+                    booking.MovieReleaseDate = Convert.ToDateTime(reader[7]);
+                    booking.ShowDateTime = Convert.ToDateTime(reader[8]);
+                    booking.BookingPhone = (string)reader[9];
+                    booking.BookingMail = (string)reader[10];
 
-                        durationData = data[5].Split(new char[] { ':' }, StringSplitOptions.None);
-                        int hour = int.Parse(durationData[0]);
-                        int minutes = int.Parse(durationData[1]);
-                        movieTheater.MovieDuration = (hour * 60) + minutes;
-                        movieTheater.MovieDirector = data[6];
-                        movieTheater.MovieReleaseDate = Convert.ToDateTime(data[7]);
-                        movieTheater.BookingMail = data[8];
-                        movieTheater.BookingPhone = data[9];
-
-                        entries.Add(movieTheater);
-
-                        str = reader.ReadLine();
-                    }
+                    if (booking != null) 
+                        entries.Add(booking);
                 }
             }
         }
-        
 
-        //private void LoadRepo()
+
+        //private void LoadRepoFromCSV()
         //{
         //    string fileName = "TheMovies.CSV";
         //    //string fileName = @"E:\GitLab\dmu-2020-exercise-materials\Supplerende materiale\Ex41-TheMovies.CSV";
@@ -318,74 +312,74 @@ namespace TheMovies.Repos
         //    }
         //}
 
-        //private void SaveRepo()
-        //{
-        //    //Int32 rowsAffected;
-        //    string commandText = "INSERT INTO Booking (" +
-        //    "cinemaName," +
-        //    "cinemaTown," +
-        //    "movieTitle," +
-        //    "movieGenre," +
-        //    "movieDirector," +
-        //    "movieDuration," +
-        //    "movieReleaseDate," +
-        //    "showDateTime," +
-        //    "bookingPhone," +
-        //    "bookingMail)"
-        //    + "VALUES (" +
-        //    "@cinemaName, " +
-        //    "@cinemaTown," +
-        //    "@movieTitle," +
-        //    "@movieGenre," +
-        //    "@movieDirector," +
-        //    "@movieDuration," +
-        //    "@movieReleaseDate," +
-        //    "@showDateTime," +
-        //    "@bookingPhone," +
-        //    "@bookingMail);";
+        private void ResetDatabase()
+        {
+            //Int32 rowsAffected;
+            string commandText = "INSERT INTO Booking (" +
+            "cinemaName," +
+            "cinemaTown," +
+            "movieTitle," +
+            "movieGenre," +
+            "movieDirector," +
+            "movieDuration," +
+            "movieReleaseDate," +
+            "showDateTime," +
+            "bookingPhone," +
+            "bookingMail)"
+            + "VALUES (" +
+            "@cinemaName, " +
+            "@cinemaTown," +
+            "@movieTitle," +
+            "@movieGenre," +
+            "@movieDirector," +
+            "@movieDuration," +
+            "@movieReleaseDate," +
+            "@showDateTime," +
+            "@bookingPhone," +
+            "@bookingMail);";
 
-        //    using (SqlConnection connection = new SqlConnection(connectionString))
-        //    {
-        //        //connection.ConnectionString = "database-sti";
+            using (SqlConnection connection = new SqlConnection(connectionString))
+            {
+                //connection.ConnectionString = "database-sti";
 
-        //        connection.Open();
+                connection.Open();
 
-        //        foreach (CinemaMovieShowBooking item in entries)
-        //        {
-        //            int hour = item.MovieDuration / 60;
-        //            int minutes = item.MovieDuration % 60;
-        //            string hourMinutes = $"{hour:00}:{minutes:00}";
+                foreach (CinemaMovieShowBooking item in entries)
+                {
+                    int hour = item.MovieDuration / 60;
+                    int minutes = item.MovieDuration % 60;
+                    string hourMinutes = $"{hour:00}:{minutes:00}";
 
-        //            if (item.CinemaName != default
-        //            && item.CinemaTown != default
-        //            && item.MovieTitle != default
-        //            && item.MovieDirector != default
-        //            && item.MovieDuration != default
-        //            && item.MovieReleaseDate != default
-        //            && item.MovieGenre != default
-        //            && item.ShowDateTime != default
-        //            && item.BookingPhone != default
-        //            && item.BookingMail != default)
-        //            {
-        //                SqlCommand command = new SqlCommand(commandText, connection);
-        //                command.Parameters.AddWithValue("@cinemaName", item.CinemaName);
-        //                command.Parameters.AddWithValue("@cinemaTown", item.CinemaTown);
-        //                command.Parameters.AddWithValue("@movieTitle", item.MovieTitle);
-        //                command.Parameters.AddWithValue("@movieGenre", item.MovieGenre);
-        //                command.Parameters.AddWithValue("@movieDirector", item.MovieDirector);
-        //                command.Parameters.AddWithValue("@movieDuration", hourMinutes);
-        //                command.Parameters.AddWithValue("@movieReleaseDate", item.MovieReleaseDate);
-        //                command.Parameters.AddWithValue("@showDateTime", item.ShowDateTime);
-        //                command.Parameters.AddWithValue("@bookingPhone", item.BookingPhone);
-        //                command.Parameters.AddWithValue("@bookingMail", item.BookingMail);
+                    if (item.CinemaName != default
+                    && item.CinemaTown != default
+                    && item.MovieTitle != default
+                    && item.MovieDirector != default
+                    && item.MovieDuration != default
+                    && item.MovieReleaseDate != default
+                    && item.MovieGenre != default
+                    && item.ShowDateTime != default
+                    && item.BookingPhone != default
+                    && item.BookingMail != default)
+                    {
+                        SqlCommand command = new SqlCommand(commandText, connection);
+                        command.Parameters.AddWithValue("@cinemaName", item.CinemaName);
+                        command.Parameters.AddWithValue("@cinemaTown", item.CinemaTown);
+                        command.Parameters.AddWithValue("@movieTitle", item.MovieTitle);
+                        command.Parameters.AddWithValue("@movieGenre", item.MovieGenre);
+                        command.Parameters.AddWithValue("@movieDirector", item.MovieDirector);
+                        command.Parameters.AddWithValue("@movieDuration", hourMinutes);
+                        command.Parameters.AddWithValue("@movieReleaseDate", item.MovieReleaseDate);
+                        command.Parameters.AddWithValue("@showDateTime", item.ShowDateTime);
+                        command.Parameters.AddWithValue("@bookingPhone", item.BookingPhone);
+                        command.Parameters.AddWithValue("@bookingMail", item.BookingMail);
 
-        //                command.ExecuteNonQuery();
+                        command.ExecuteNonQuery();
 
-        //            }
-        //        }
-        //    }
+                    }
+                }
+            }
 
-        //}
+        }
 
 
     }
