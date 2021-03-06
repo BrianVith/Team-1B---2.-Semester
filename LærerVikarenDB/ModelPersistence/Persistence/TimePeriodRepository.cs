@@ -30,7 +30,7 @@ namespace ModelPersistence.Persistence
             throw new NotImplementedException();
         }
 
-        public void GetById(int id)
+        public TimePeriod GetById(int id)
         {
             throw new NotImplementedException();
         }

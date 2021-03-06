@@ -8,7 +8,7 @@ namespace ModelPersistence.Persistence
     {
         void Add(T entity); // create
         IEnumerable<T> GetAll(); // read
-        void GetById(int id);
+        T GetById(int id);
         void Update(T entity); // update
         void Remove(T entity); // delete
     }

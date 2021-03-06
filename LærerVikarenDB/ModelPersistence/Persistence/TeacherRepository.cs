@@ -34,7 +34,7 @@ namespace ModelPersistence.Persistence
             throw new NotImplementedException();
         }
 
-        public void GetById(int id)
+        public Teacher GetById(int id)
         {
             throw new NotImplementedException();
         }

@@ -32,7 +32,7 @@ namespace ModelPersistence.Persistence
             throw new NotImplementedException();
         }
 
-        public void GetById(int id)
+        public Available GetById(int id)
         {
             throw new NotImplementedException();
         }
