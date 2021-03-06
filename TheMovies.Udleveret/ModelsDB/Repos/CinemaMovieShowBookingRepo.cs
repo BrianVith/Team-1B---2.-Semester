@@ -17,8 +17,10 @@ namespace TheMovies.Repos
         public CinemaMovieShowBookingRepo()
         {
             entries = new List<CinemaMovieShowBooking>();
-            LoadRepo();
+            LoadRepoFromCSV();
+            //LoadRepo();
             //ResetDatabase();
+        
         }
 
         public CinemaMovieShowBooking GetById(object id)
@@ -243,7 +245,7 @@ namespace TheMovies.Repos
                 string[] hourMinutes;
                 connection.Open();
 
-                SqlCommand command = new SqlCommand("SELECT * FROM Booking;", connection);
+                SqlCommand command = new SqlCommand("SELECT * FROM OldBooking;", connection);
                 SqlDataReader reader = command.ExecuteReader();
                 while (reader.Read())
                 {
@@ -271,51 +273,51 @@ namespace TheMovies.Repos
         }
 
 
-        //private void LoadRepoFromCSV()
-        //{
-        //    string fileName = "TheMovies.CSV";
-        //    //string fileName = @"E:\GitLab\dmu-2020-exercise-materials\Supplerende materiale\Ex41-TheMovies.CSV";
-        //    using (StreamReader reader = new StreamReader(fileName))
-        //    {
-        //        reader.ReadLine();
-        //        string str = reader.ReadLine();
-        //        string[] data;
-        //        string[] durationData;
+        private void LoadRepoFromCSV()
+        {
+            string fileName = "TheMovies.CSV";
+            //string fileName = @"E:\GitLab\dmu-2020-exercise-materials\Supplerende materiale\Ex41-TheMovies.CSV";
+            using (StreamReader reader = new StreamReader(fileName))
+            {
+                reader.ReadLine();
+                string str = reader.ReadLine();
+                string[] data;
+                string[] durationData;
 
-        //        while (str != null)
-        //        {
-        //            data = str.Split(new char[] { ';' }, StringSplitOptions.None);
-        //            if (data.Length > 9)
-        //            {
-        //                CinemaMovieShowBooking movieTheater = new CinemaMovieShowBooking();
+                while (str != null)
+                {
+                    data = str.Split(new char[] { ';' }, StringSplitOptions.None);
+                    if (data.Length > 9)
+                    {
+                        CinemaMovieShowBooking movieTheater = new CinemaMovieShowBooking();
 
-        //                movieTheater.CinemaName = data[0];
-        //                movieTheater.CinemaTown = data[1];
-        //                movieTheater.ShowDateTime = Convert.ToDateTime(data[2]);
-        //                movieTheater.MovieTitle = data[3];
-        //                movieTheater.MovieGenre = data[4];
+                        movieTheater.CinemaName = data[0];
+                        movieTheater.CinemaTown = data[1];
+                        movieTheater.ShowDateTime = Convert.ToDateTime(data[2]);
+                        movieTheater.MovieTitle = data[3];
+                        movieTheater.MovieGenre = data[4];
 
-        //                durationData = data[5].Split(new char[] { ':' }, StringSplitOptions.None);
-        //                int hour = int.Parse(durationData[0]);
-        //                int minutes = int.Parse(durationData[1]);
-        //                movieTheater.MovieDuration = (hour * 60) + minutes;
-        //                movieTheater.MovieDirector = data[6];
-        //                movieTheater.MovieReleaseDate = Convert.ToDateTime(data[7]);
-        //                movieTheater.BookingMail = data[8];
-        //                movieTheater.BookingPhone = data[9];
+                        durationData = data[5].Split(new char[] { ':' }, StringSplitOptions.None);
+                        int hour = int.Parse(durationData[0]);
+                        int minutes = int.Parse(durationData[1]);
+                        movieTheater.MovieDuration = (hour * 60) + minutes;
+                        movieTheater.MovieDirector = data[6];
+                        movieTheater.MovieReleaseDate = Convert.ToDateTime(data[7]);
+                        movieTheater.BookingMail = data[8];
+                        movieTheater.BookingPhone = data[9];
 
-        //                entries.Add(movieTheater);
+                        entries.Add(movieTheater);
 
-        //                str = reader.ReadLine();
-        //            }
-        //        }
-        //    }
-        //}
+                        str = reader.ReadLine();
+                    }
+                }
+            }
+        }
 
         private void ResetDatabase()
         {
             //Int32 rowsAffected;
-            string commandText = "INSERT INTO Booking (" +
+            string commandText = "INSERT INTO OldBooking (" +
             "cinemaName," +
             "cinemaTown," +
             "movieTitle," +
